@@ -3,7 +3,7 @@ var fs = require('fs');
 var Nightmare = require('nightmare');
 
 // define data source and target
-var url = 'http://results.prudentialridelondon.co.uk/2015/?pid=search';
+var url = 'http://results.prudentialridelondon.co.uk/2015/?pid=search&num_results=100';
 var csvFile = 'prudential.csv';
 
 // init target file with a headline
@@ -17,9 +17,9 @@ fs.writeFileSync(csvFile, [
 	'EST MILE 17',
 	'EST MILE 26',
 	'EST MILE 47',
-	'EST MILE 55'
-	'EST MILE 75'
-	'EST MILE 85'
+	'EST MILE 55',
+	'EST MILE 75',
+	'EST MILE 85',
 	'FINISH',
 	'FINISH SECONDS'	
 ].join(';') + "\r\n");
