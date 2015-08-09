@@ -21,21 +21,25 @@ fs.writeFileSync(csvFile, [
 	'EST MILE 75',
 	'EST MILE 85',
 	'FINISH',
-	'FINISH SECONDS'	
+	'FINISH SECONDS',
+	'Gender'
 ].join(';') + "\r\n");
 
 // cache of urls already processed
 var processed = [];
 
-// start with first url
-loadUrl(url);
+// start with loading male data
+loadUrl(url + '&search%5Bsex%5D=M', 'Men');
+
+// and load female parallel
+loadUrl(url + '&search%5Bsex%5D=W', 'Women');
 
 
 /**
  * load url and parse content
  * @param {url}
  */
-function loadUrl(url) {
+function loadUrl(url, filterString) {
 	processed.push(url);
 	
 	// next url to load
@@ -66,7 +70,7 @@ function loadUrl(url) {
 				for ( var j in cols ) {
 					// extract country
 					var text = cols[j].innerText ? String(cols[j].innerText).replace('» ', '') : '';
-					data.push(text);
+					data.push('"' + text + '"');
 					
 					// extract country code
 					if ( j == 1 ) {
@@ -91,6 +95,7 @@ function loadUrl(url) {
 			if ( rows ) {
 				var row;
 				while ( row = rows.shift() ) {
+        			row.push(filterString);
 					var line = row.join(';');
 					fs.appendFileSync(csvFile, line + "\r\n");
 				}
@@ -101,7 +106,7 @@ function loadUrl(url) {
 	    .run(function (err, nightmare) {
 			if (err) return console.log(err);
 			if ( nextUrl && processed.indexOf(nextUrl) == -1 ) {
-				loadUrl(nextUrl);
+				loadUrl(nextUrl, filterString);
 			}
 	    });
 }
